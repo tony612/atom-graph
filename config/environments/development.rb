@@ -27,3 +27,5 @@ AtomGraph::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 end
+
+Rails.logger = Logger.new(STDOUT)

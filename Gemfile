@@ -27,8 +27,12 @@ gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
+gem 'sidekiq'
+gem 'whenever', :require => false
+gem 'nokogiri'
 gem "mongoid", "~> 4.0.0.beta1"
 gem 'bson_ext'
+gem "octokit", "~> 2.0"
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
