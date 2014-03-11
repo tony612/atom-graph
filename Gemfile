@@ -29,9 +29,13 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'sidekiq'
 gem 'whenever', :require => false
+
 gem 'nokogiri'
+gem 'typhoeus'
+
 gem "mongoid", "~> 4.0.0.beta1"
 gem 'bson_ext'
+
 gem "octokit", "~> 2.0"
 
 group :doc do

@@ -2,21 +2,18 @@ class RepoWorker
   include Sidekiq::Worker
 
   def perform
-    require 'open-uri'
-    require 'nokogiri'
-
     base_url = "https://atom.io"
     page_path = "/packages/list"
     page_url = base_url + page_path
 
     # FIXME: Maybe timeout
-    home = Nokogiri::HTML(open(page_url))
+    home = Nokogiri::HTML(Typhoeus.get(page_url).body)
     page_total = home.css('.pagination a:not(.next_page)').last.content
     list_links = ("1"..page_total).map { |p| "#{page_url}?page=#{p}" }
 
     # Find the atom home url for each package
     links = list_links.inject([]) do |memo, page|
-      current = Nokogiri::HTML(open(page))
+      current = Nokogiri::HTML(Typhoeus.get(page).body)
       memo.concat(current.css('.package-name a').map do |l|
         { :atom_url => URI.escape(base_url + l['href']) }
       end)
@@ -26,7 +23,7 @@ class RepoWorker
     links = links.map do |link|
       begin
         l = link[:atom_url]
-        pkg_page = Nokogiri::HTML(open(l))
+        pkg_page = Nokogiri::HTML(Typhoeus.get(l).body)
         link[:url] = pkg_page.css('.package-meta > a').
           map { |l| l['href'] }.
           # make sure it's a right github url
